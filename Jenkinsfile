@@ -1,10 +1,11 @@
+
 pipeline{
     agent any
     tools{
         maven 'local_maven'
     }
 
-    stage('Build'){
+    stage ('Build'){
         steps{
             sh 'mvn clean package'
         }
@@ -15,7 +16,7 @@ pipeline{
             }
         }
     }
-    stage('Deploy to tomcat'){
+    stage ('Deploy to tomcat') {
         steps{
             deploy adapters: [tomcat9(credentialsId: 'kavya', path: '', url: 'http://15.206.151.1:8080')], contextPath: null, war: '**/*.war'
         }
