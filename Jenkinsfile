@@ -1,23 +1,29 @@
-pipeline{
+pipeline {
     agent any
-    tools{
+    tools {
         maven 'local_maven'
     }
-    stages{
-        stage ('Build'){
-            steps{
+    stages {
+        stage('Build') {
+            steps {
                 sh 'mvn clean package'
             }
-            post{
-                success{
+            post {
+                success {
                     echo "Archiving the artifacts"
                     archiveArtifacts artifacts: '**/target/*.war'
                 }
             }
         }
-        stage ('Deploy to tomcat') {
-            steps{
-                deploy adapters: [tomcat9(credentialsId: 'kavya', path: '', url: 'http://15.206.151.1:8080')], contextPath: null, war: '**/*.war'
+        stage('Deploy to Tomcat') {
+            steps {
+                deploy adapters: [tomcat9(
+                    credentialsId: 'kavya',
+                    path: '',
+                    url: 'http://15.206.151.1:8080/manager/text'
+                )],
+                contextPath: '',
+                war: '**/*.war'
             }
         }
     }
